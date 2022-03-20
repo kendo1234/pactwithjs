@@ -1,0 +1,29 @@
+{
+  "name": "pactwithjs",
+  "version": "1.0.0",
+  "description": "Example of consumer driven contract testing with pact and JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test:consumer": "jest consumer/consumer-contract.spec.js --testTimeout=20000",
+    "can:i:deploy:consumer": "pact-broker can-i-deploy --pacticipant movie-consumer --version 1.0 --to staging --broker-base-url $PACT_BROKER_URL",
+    "can:i:deploy:provider": "pact-broker can-i-deploy --pacticipant movie-provider --version 1.0.0 --to staging --broker-base-url $PACT_BROKER_URL",
+    "publish:pact": "pact-broker publish ./pacts --consumer-app-version 1.0 --broker-base-url $PACT_BROKER_URL --broker-token $PACT_BROKER_TOKEN",
+    "start:and:test:provider": "node provider/provider-service.js & jest provider/provider-contract.spec.js --testTimeout=20000",
+    "create:provider:tag": "pact-broker create-version-tag --pacticipant movie-provider --version 1.0.0 --tag staging --broker-base-url $PACT_BROKER_URL",
+    "create:consumer:tag": "pact-broker create-version-tag --pacticipant movie-consumer --version 1.0 --tag staging --broker-base-url $PACT_BROKER_URL"
+  },
+  "author": "kendo",
+  "license": "ISC",
+  "dependencies": {
+    "@pact-foundation/pact": "^9.17.3",
+    "axios": "^0.26.1",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jest": "^27.5.1",
+    "joi": "^17.6.0"
+  }
+}
